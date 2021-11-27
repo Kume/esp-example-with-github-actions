@@ -1,0 +1,13 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+    - name: esp-idf build
+      uses: espressif/esp-idf-ci-action@release-v4.3
+    - name: Archive
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: build
