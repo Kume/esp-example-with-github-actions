@@ -4,12 +4,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
-    - name: esp-idf build
-      uses: espressif/esp-idf-ci-action@release-v4.3
-    - name: Archive
-      uses: actions/upload-artifact@v2
-      with:
-        name: build
-        path: build
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: esp-idf build
+        uses: espressif/esp-idf-ci-action@release-v4.3
+      - run: mkdir out
+      - run: cat flasher_args.json | jq '.flash_files[]' | xargs -n1 -i cp --parents {} ../out
+        working-directory: build
+      - run: cp build/flasher_args.json out/
+      - name: Archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: out
+          path: out
